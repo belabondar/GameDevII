@@ -1,22 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    private List<EnemyController> _enemies = new List<EnemyController>();
-    private List<TowerController> _towerControllers = new List<TowerController>();
-    void Awake()
+    private readonly List<EnemyController> _enemies = new();
+    private readonly List<TowerController> _towerControllers = new();
+
+    private void Awake()
     {
-        if(Instance == null) // If there is no instance already
+        if (Instance == null) // If there is no instance already
         {
-            DontDestroyOnLoad(gameObject); // Keep the GameObject, this component is attached to, across different scenes
+            DontDestroyOnLoad(
+                gameObject); // Keep the GameObject, this component is attached to, across different scenes
             Instance = this;
-        } else if(Instance != this) // If there is already an instance and it's not `this` instance
+        }
+        else if (Instance != this) // If there is already an instance and it's not `this` instance
         {
             Destroy(gameObject); // Destroy the GameObject, this component is attached to
         }
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        SetTargets();
     }
 
     public void AddEnemy(EnemyController enemy)
@@ -34,6 +35,9 @@ public class GameManager : MonoBehaviour
     public void RemoveEnemy(EnemyController enemy)
     {
         _enemies.Remove(enemy);
+        foreach (var tower in _towerControllers)
+            if (tower.GetTarget() == enemy)
+                tower.RemoveTarget();
     }
 
     public int GetEnemyCount()
@@ -41,18 +45,33 @@ public class GameManager : MonoBehaviour
         return _enemies.Count;
     }
 
-    [CanBeNull]
-    public EnemyController GetTarget(Transform towerLocation, float range)
-    {
-        Debug.Log("Getting target");
-        foreach (var enemy in _enemies)
-        {
-            if (Vector3.Distance(towerLocation.position, enemy.transform.position) <= range)
-            {
-                return enemy;
-            }
-        }
 
-        return null;
+    public void AddTower(TowerController tower)
+    {
+        _towerControllers.Add(tower);
+    }
+
+    public void RemoveTower(TowerController tower)
+    {
+        _towerControllers.Remove(tower);
+    }
+
+    private void SetTargets()
+    {
+        foreach (var tower in _towerControllers)
+        {
+            var range = tower.GetRange();
+            foreach (var enemy in _enemies)
+                if (GetDistance(tower.transform, enemy.transform) <= range)
+                {
+                    tower.SetTarget(enemy);
+                    break;
+                }
+        }
+    }
+
+    private static float GetDistance(Transform a, Transform b)
+    {
+        return Vector3.Distance(a.position, b.position);
     }
 }

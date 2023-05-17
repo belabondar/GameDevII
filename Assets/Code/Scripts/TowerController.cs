@@ -1,54 +1,112 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class TowerController : MonoBehaviour
 {
-    public float projectileSpeed = 10f;
-    public int damage = 2;
-    public float range = 5f;
-    public float rateOfFire = 0.2f;
-    public GameObject projectile;
+    public float baseProjectileSpeed = 10f;
+    public float baseDamage = 2f;
+    public float baseRange = 5f;
+    public float baseRateOfFire = 1f;
+
+    public float projectileSpeedOffset = 0.5f;
+    public float damageOffset = 0.5f;
+    public float rangeOffset = 2f;
+    public float fireRateOffset = 0.5f;
+
+    public int maxUpgrades = 15;
+    public ProjectileController projectile;
     public Transform launchPoint;
 
     private GameManager _gameManager;
 
-    private Boolean _allowFire = true;
+    private bool _hasTarget;
+
+    private int _speedUpgrades, _damageUpgrades, _rangeUpgrades, _fireRateUpgrades;
 
     private EnemyController _target;
 
-    private Boolean _hasTarget;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _gameManager = GameManager.Instance;
+        _gameManager.AddTower(this);
+        StartCoroutine(Launch());
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!_hasTarget)
+    }
+
+    //Launch an arrow every x seconds if there is targets in range
+    private IEnumerator Launch()
+    {
+        while (true)
         {
-            _target = _gameManager.GetTarget(transform, range);
-            _hasTarget = !(_target != null);
-        }
-        else if (_allowFire)
-        {
-            StartCoroutine(Launch());
+            if (_hasTarget)
+            {
+                var position = launchPoint.position;
+                var dir = _target.transform.position - position;
+                var rotation = Quaternion.LookRotation(dir);
+                var projectileInstance = Instantiate(projectile, position, rotation);
+                //Make Instance a child of the tower
+                projectileInstance.transform.parent = gameObject.transform;
+
+                //Set speed and damage
+                projectileInstance.speed = baseProjectileSpeed + _speedUpgrades * projectileSpeedOffset;
+                projectileInstance.damage = baseDamage + _damageUpgrades * damageOffset;
+
+                //Set Target
+                projectileInstance.Target = _target;
+            }
+
+
+            yield return new WaitForSeconds(1f / (baseRateOfFire + _fireRateUpgrades * fireRateOffset));
         }
     }
 
-    private IEnumerator Launch()
+    public EnemyController GetTarget()
     {
-        _allowFire = false;
-        var position = launchPoint.position;
-        var dir = _target.transform.position - position;
-        var rotation = Quaternion.LookRotation(dir);
-        Instantiate(projectile, position, rotation);
-        yield return new WaitForSeconds(rateOfFire);
-        _allowFire = true;
+        return _target;
+    }
+
+    public void SetTarget(EnemyController target)
+    {
+        _target = target;
+        _hasTarget = true;
+    }
+
+    public float GetRange()
+    {
+        return baseRange + _rangeUpgrades * rangeOffset;
+    }
+
+    public void RemoveTarget()
+    {
+        _hasTarget = false;
+    }
+
+    public void UpgradeFireRate()
+    {
+        if (_fireRateUpgrades < maxUpgrades)
+            _fireRateUpgrades += 1;
+    }
+
+    public void UpgradeRange()
+    {
+        if (_rangeUpgrades < maxUpgrades)
+            _rangeUpgrades += 1;
+    }
+
+    public void UpgradeDamage()
+    {
+        if (_damageUpgrades < maxUpgrades)
+            _damageUpgrades += 1;
+    }
+
+    public void UpgradeProjectileSpeed()
+    {
+        if (_speedUpgrades < maxUpgrades)
+            _speedUpgrades += 1;
     }
 }

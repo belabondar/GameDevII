@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseSpawner : MonoBehaviour
@@ -12,34 +10,34 @@ public class BaseSpawner : MonoBehaviour
     public int maxInstances = 100;
 
     private GameManager _gameManager;
-    
-    
-    void Start()
+
+
+    private void Start()
     {
         _gameManager = GameManager.Instance;
-        float time = 1f / spawnRate;
+        var time = 1f / spawnRate;
         InvokeRepeating(nameof(SpawnEnemy), 0f, time);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 
     private void SpawnEnemy()
     {
         var activeInstances = _gameManager.GetEnemyCount();
         if (activeInstances > maxInstances) return;
-        
+
         var position = RandomPointOnCircleEdge();
-        var dir = this.transform.position - position;
-            
+        var dir = transform.position - position;
+
         // Aligns rotation to direction vector
         var rotation = Quaternion.LookRotation(dir);
-        GameObject.Instantiate(enemy, position, rotation );
+        var instance = Instantiate(enemy, position, rotation);
+        instance.transform.parent = gameObject.transform;
     }
-    
+
     private Vector3 RandomPointOnCircleEdge()
     {
         var vector2 = Random.insideUnitCircle.normalized * radius;
