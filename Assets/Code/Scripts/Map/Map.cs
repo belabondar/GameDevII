@@ -5,70 +5,74 @@ using Code.Scripts.Map;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MapGenerator : MonoBehaviour
+public class Map : MonoBehaviour
 {
     public int tiles = 20;
 
     public float tileSize = 4f;
 
-    public float gap;
-
-    public GameObject groundTile;
-    public GameObject pathTile;
-    public GameObject startTile;
-    public GameObject endTile;
     public float scale = 20f;
 
-    private readonly List<GameObject> _tileStore = new();
+    public Tile tile;
     private int[,] _map;
-    private float _noiseOffset;
-    private float _oldScale;
 
-    private Vector3 _position;
+    private List<Tile> _tileStore;
+    private List<Vector3> _wayPoints;
 
     private MapNode[,] _weightsMap;
 
+    private float _xOffset;
+    private float _yOffset;
+
     private void Awake()
     {
-        _oldScale = scale;
-        PopulateMap();
-        _noiseOffset = Random.Range(0f, 100f);
+        Init();
     }
 
-    private void Update()
+    private void Init()
     {
-        if (scale != _oldScale)
-        {
-            _oldScale = scale;
-            ResetMap();
-            PopulateMap();
-        }
+        _xOffset = Random.Range(0f, 1000f);
+        _yOffset = Random.Range(0f, 1000f);
+
+
+        _weightsMap = new MapNode[tiles, tiles];
+        _map = new int[tiles, tiles];
+        _tileStore = new List<Tile>();
+        _wayPoints = new List<Vector3>();
+
+
+        CreateMap();
     }
 
-    private void SetUpMap()
+    private void CreateMap()
+    {
+        PrepareMap();
+        PopulateMap();
+    }
+
+    private void PrepareMap()
     {
         SetWeights();
         FindOptimalPath();
     }
 
-    private void ResetMap()
+    public void ResetMap()
     {
-        foreach (var tile in _tileStore)
-        {
-            Debug.Log("Destroying");
-            Destroy(tile);
-        }
+        //Destroy each map tile
+        foreach (var tileObject in _tileStore) tileObject.GetComponent<Tile>().Delete();
+
+        Init();
+        CreateMap();
     }
 
     private void SetWeights()
     {
-        _weightsMap = new MapNode[tiles, tiles];
         for (var x = 0; x < tiles; x++)
         for (var y = 0; y < tiles; y++)
             _weightsMap[x, y] =
                 new MapNode(
-                    Mathf.PerlinNoise((float)x / tiles * scale + Random.Range(0f, 1000f),
-                        (float)y / tiles * scale + Random.Range(0f, 1000f)),
+                    Mathf.PerlinNoise((float)x / tiles * scale + _xOffset,
+                        (float)y / tiles * scale + _yOffset),
                     x, y);
     }
 
@@ -125,12 +129,17 @@ public class MapGenerator : MonoBehaviour
 
         void SetPath()
         {
-            _map = new int[tiles, tiles];
+            var totalSize = tiles * tileSize;
+            var start = -1 * (totalSize / 2 - tileSize / 2);
             _map[destination.x, destination.y] = 3;
+            _wayPoints.Insert(0, new Vector3(start + destination.x * tileSize, 0f, start + destination.y * tileSize));
+
             var successor = destination.bestSuccesor;
+
             while (successor != null)
             {
                 _map[successor.x, successor.y] = 1;
+                _wayPoints.Insert(0, new Vector3(start + successor.x * tileSize, 0f, start + successor.y * tileSize));
                 successor = successor.bestSuccesor;
             }
 
@@ -148,45 +157,30 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-
     private void PopulateMap()
     {
-        SetUpMap();
-        var totalSize = tiles * tileSize + (tiles - 1) * gap;
-        _position = new Vector3(-1 * (totalSize / 2 - tileSize), 0f, -1 * (totalSize / 2 - tileSize));
+        var totalSize = tiles * tileSize;
+        var position = new Vector3(-1 * (totalSize / 2 - tileSize / 2), 0f, -1 * (totalSize / 2 - tileSize / 2));
         for (var i = 0; i < tiles; i++)
         {
             for (var j = 0; j < tiles; j++)
             {
                 var tileIndex = _map[i, j];
-                switch (tileIndex)
-                {
-                    case 1:
-                        InstantiateTile(pathTile, _position, gameObject.transform.rotation);
-                        break;
-                    case 2:
-                        InstantiateTile(startTile, _position, gameObject.transform.rotation);
-                        break;
-                    case 3:
-                        InstantiateTile(endTile, _position, gameObject.transform.rotation);
-                        break;
-                    default:
-                        InstantiateTile(groundTile, _position, gameObject.transform.rotation);
-                        break;
-                }
-
-                _position += new Vector3(0f, 0f, tileSize + gap);
+                var instance = Instantiate(tile, position, transform.rotation);
+                var script = instance.GetComponent<Tile>();
+                script.SetTile(tileIndex);
+                instance.transform.parent = gameObject.transform;
+                _tileStore.Add(instance);
+                position += new Vector3(0f, 0f, tileSize);
             }
 
-            _position += new Vector3(tileSize + gap, 0f, totalSize * -1 - gap);
+            position += new Vector3(tileSize, 0f, totalSize * -1);
         }
     }
 
-    private void InstantiateTile(GameObject tile, Vector3 position, Quaternion rotation)
+    public List<Vector3> GetWaypoints()
     {
-        var instance = Instantiate(tile, _position, gameObject.transform.rotation);
-        instance.transform.parent = gameObject.transform;
-        _tileStore.Add(instance);
+        return _wayPoints;
     }
 
     private class MapNode : IEquatable<MapNode>

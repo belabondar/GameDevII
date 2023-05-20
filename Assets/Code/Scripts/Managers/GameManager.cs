@@ -5,8 +5,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Map mapRef;
+
+    public GameObject enemy;
+
     private readonly List<EnemyController> _enemies = new();
+    private readonly List<Spawner> _spawners = new();
     private readonly List<TowerController> _towerControllers = new();
+
+    private Map _map;
 
     private void Awake()
     {
@@ -20,11 +27,16 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // Destroy the GameObject, this component is attached to
         }
+
+        _map = Instantiate(mapRef, new Vector3(0, 0, 0), transform.rotation);
     }
 
     private void Update()
     {
         SetTargets();
+        if (Input.GetKeyDown("space"))
+            if (_spawners[0] != null)
+                _spawners[0].Spawn(enemy, 10, 1f);
     }
 
     public void AddEnemy(EnemyController enemy)
@@ -60,18 +72,37 @@ public class GameManager : MonoBehaviour
     {
         foreach (var tower in _towerControllers)
         {
+            var hasTarget = false;
             var range = tower.GetRange();
             foreach (var enemy in _enemies)
                 if (GetDistance(tower.transform, enemy.transform) <= range)
                 {
                     tower.SetTarget(enemy);
+                    hasTarget = true;
                     break;
                 }
+
+            if (!hasTarget) tower.RemoveTarget();
         }
     }
 
     private static float GetDistance(Transform a, Transform b)
     {
         return Vector3.Distance(a.position, b.position);
+    }
+
+    public List<Vector3> GetWayPoints()
+    {
+        return _map.GetWaypoints();
+    }
+
+    public void AddSpawner(Spawner spawner)
+    {
+        _spawners.Add(spawner);
+    }
+
+    public void RegenerateMap()
+    {
+        _map.ResetMap();
     }
 }

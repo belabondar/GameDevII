@@ -15,11 +15,11 @@ public class TowerController : MonoBehaviour
 
     public int maxUpgrades = 15;
     public ProjectileController projectile;
-    public Transform launchPoint;
 
     private GameManager _gameManager;
 
-    private bool _hasTarget;
+    private bool _hasTarget, _isPreview;
+    private Vector3 _launchPoint;
 
     private int _speedUpgrades, _damageUpgrades, _rangeUpgrades, _fireRateUpgrades;
 
@@ -29,13 +29,15 @@ public class TowerController : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _launchPoint = transform.Find("Launcher").position;
+        if (_isPreview) return;
         _gameManager.AddTower(this);
         StartCoroutine(Launch());
     }
 
-    // Update is called once per frame
-    private void Update()
+    public void IsPreview()
     {
+        _isPreview = true;
     }
 
     //Launch an arrow every x seconds if there is targets in range
@@ -45,7 +47,7 @@ public class TowerController : MonoBehaviour
         {
             if (_hasTarget)
             {
-                var position = launchPoint.position;
+                var position = _launchPoint;
                 var dir = _target.transform.position - position;
                 var rotation = Quaternion.LookRotation(dir);
                 var projectileInstance = Instantiate(projectile, position, rotation);
