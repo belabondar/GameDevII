@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: aa164bc3976418e4faaa3d2215cb19b2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - groundTile: {fileID: 8482564233964077854, guid: 8fd5102de372e2546ba612acee2ea886,
+      type: 3}
+  - pathTile: {fileID: 8482564233964077854, guid: 7c0584091d64ac54f966fad2bfb48218,
+      type: 3}
+  - startTile: {fileID: 8700457979556766593, guid: bc6bd0364962dd74ead4b662623511c0,
+      type: 3}
+  - endTile: {fileID: 2163648540400928370, guid: 45908a8cd3f33594aa90b0c393a845c1,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

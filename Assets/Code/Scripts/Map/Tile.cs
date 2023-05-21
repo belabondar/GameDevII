@@ -1,96 +1,61 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public GameObject pathTile;
-    public GameObject groundTile;
-    public GameObject endPoint;
-    public GameObject startPoint;
+    public GameObject[] envAssets;
+    private readonly List<GameObject> envObjects = new();
+    private bool _blocked;
+    private TileType _tileType;
 
-    private GameObject _activeTile;
-    private BuildManager _buildManager;
-    private GameManager _gameManager;
-    private int _tileId;
-    private GameObject _turret;
-    private GameObject _turretPreview;
-
-    private void Start()
+    public void Init(TileType tileType)
     {
-        _gameManager = GameManager.Instance;
-        _buildManager = BuildManager.Instance;
-    }
-
-    private void OnMouseDown()
-    {
-        if (CanBuild()) BuildTurret();
-    }
-
-    private void OnMouseEnter()
-    {
-        BuildPreviewTurret();
-    }
-
-    private void OnMouseExit()
-    {
-        DestroyPreviewTurret();
-    }
-
-    public void Delete()
-    {
-        Destroy(_activeTile);
-        Destroy(this);
-    }
-
-    public void SetTile(int tileId)
-    {
-        var transformInstance = transform;
-        _tileId = tileId;
-        _activeTile = Instantiate(GetTileFromId(), transformInstance.position, transformInstance.rotation);
-        _activeTile.transform.parent = transform;
-    }
-
-    private GameObject GetTileFromId()
-    {
-        return _tileId switch
+        _tileType = tileType;
+        if (tileType == TileType.Ground)
         {
-            1 => pathTile,
-            2 => startPoint,
-            3 => endPoint,
-            _ => groundTile
-        };
-    }
-
-    public GameObject GetActiveTile()
-    {
-        return _activeTile;
-    }
-
-    private bool CanBuild()
-    {
-        return _buildManager.GetTurretToBuild() != null && _turret == null && _tileId == 0;
-    }
-
-    private void BuildPreviewTurret()
-    {
-        _turretPreview = Instantiate(_buildManager.GetTurretToBuild(), transform.position, transform.rotation);
-        _turretPreview.GetComponent<TowerController>().IsPreview();
-        if (CanBuild())
-            _turretPreview.GetComponent<Renderer>().material = _buildManager.GetAllowedMaterial();
+            if (!(Random.Range(0f, 1f) < 0.2f)) return;
+            _blocked = true;
+            BuildEnv();
+        }
         else
-            _turretPreview.GetComponent<Renderer>().material = _buildManager.GetDisallowedMaterial();
+        {
+            _blocked = true;
+        }
     }
 
-    private void DestroyPreviewTurret()
+    public bool UnBlock()
     {
-        if (_turretPreview != null)
-            Destroy(_turretPreview);
-        _turretPreview = null;
+        if (_tileType == TileType.Ground)
+            _blocked = false;
+
+        //If successfully unblocked return true
+        return !_blocked;
     }
 
-    private void BuildTurret()
+    public bool IsBlocked()
     {
-        if (_turretPreview != null) Destroy(_turretPreview);
+        return _blocked;
+    }
 
-        _turret = Instantiate(_buildManager.GetTurretToBuild(), transform.position, transform.rotation);
+    private void BuildEnv()
+    {
+        float[] xMinMax = { -1.5f, 1.5f };
+        float[] zMinMax = { -1.5f, 1.5f };
+        var assetCount = Random.Range(4, 8);
+        if (envAssets.Length == 0) return;
+        for (var i = 0; i < assetCount; i++)
+        {
+            Debug.Log("Spawn Asset");
+            var asset = envAssets[Random.Range(0, envAssets.Length - 1)];
+            var position = transform.position + new Vector3(Random.Range(xMinMax[0], xMinMax[1]), 0f,
+                Random.Range(zMinMax[0], zMinMax[1]));
+            envObjects.Add(Instantiate(asset, position, new Quaternion(0, Random.Range(0f, 360f), 0, 0)));
+        }
+    }
+
+    public void Destroy()
+    {
+        foreach (var item in envObjects) Destroy(item);
+        Destroy(gameObject);
     }
 }

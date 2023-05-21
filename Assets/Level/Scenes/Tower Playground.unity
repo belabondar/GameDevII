@@ -123,65 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &30649493
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2883939560288758016, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_Name
-      value: Archer Tower
-      objectReference: {fileID: 0}
-    - target: {fileID: 2955393777770641880, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: rateOfFire
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6762048212756422625, guid: 5245599b4f1d23b4aa99e1a6095775eb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 5245599b4f1d23b4aa99e1a6095775eb, type: 3}
 --- !u!1 &216676710
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,6 +250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c916896cea700c4d9b758b3b1663900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapRef: {fileID: 0}
+  enemy: {fileID: 0}
 --- !u!4 &708656112
 Transform:
   m_ObjectHideFlags: 0
@@ -751,6 +694,85 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
+--- !u!1001 &1329478243
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 17323767492907226, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: baseRange
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 17323767492907226, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: baseProjectileSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617565382426893544, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499847310015617613, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
+        type: 3}
+      propertyPath: m_Name
+      value: Archer Tower
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d, type: 3}
 --- !u!1 &1572334776
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class TowerController : MonoBehaviour
@@ -15,11 +16,11 @@ public class TowerController : MonoBehaviour
 
     public int maxUpgrades = 15;
     public ProjectileController projectile;
+    public Transform launchPoint;
 
     private GameManager _gameManager;
 
     private bool _hasTarget, _isPreview;
-    private Vector3 _launchPoint;
 
     private int _speedUpgrades, _damageUpgrades, _rangeUpgrades, _fireRateUpgrades;
 
@@ -29,10 +30,14 @@ public class TowerController : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
-        _launchPoint = transform.Find("Launcher").position;
         if (_isPreview) return;
         _gameManager.AddTower(this);
         StartCoroutine(Launch());
+    }
+
+    private void Update()
+    {
+        _target = GetTarget();
     }
 
     public void IsPreview()
@@ -40,23 +45,44 @@ public class TowerController : MonoBehaviour
         _isPreview = true;
     }
 
+    [CanBeNull]
+    private EnemyController GetTarget()
+    {
+        var enemies = _gameManager.GetEnemies();
+        foreach (var enemy in enemies)
+            if (Vector3.Distance(enemy.transform.position, transform.position) <= CalcRange())
+            {
+                Debug.Log("Found target");
+                return enemy;
+            }
+
+        Debug.Log("Found no target");
+        return null;
+    }
+
+    private float CalcRange()
+    {
+        return baseRange + _rangeUpgrades * rangeOffset;
+    }
+
     //Launch an arrow every x seconds if there is targets in range
     private IEnumerator Launch()
     {
         while (true)
         {
-            if (_hasTarget)
+            if (_target != null)
             {
-                var position = _launchPoint;
+                var position = launchPoint.position;
                 var dir = _target.transform.position - position;
                 var rotation = Quaternion.LookRotation(dir);
                 var projectileInstance = Instantiate(projectile, position, rotation);
                 //Make Instance a child of the tower
                 projectileInstance.transform.parent = gameObject.transform;
 
-                //Set speed and damage
+                //Settings
                 projectileInstance.speed = baseProjectileSpeed + _speedUpgrades * projectileSpeedOffset;
                 projectileInstance.damage = baseDamage + _damageUpgrades * damageOffset;
+                projectileInstance.distanceCull = CalcRange();
 
                 //Set Target
                 projectileInstance.Target = _target;
@@ -65,17 +91,6 @@ public class TowerController : MonoBehaviour
 
             yield return new WaitForSeconds(1f / (baseRateOfFire + _fireRateUpgrades * fireRateOffset));
         }
-    }
-
-    public EnemyController GetTarget()
-    {
-        return _target;
-    }
-
-    public void SetTarget(EnemyController target)
-    {
-        _target = target;
-        _hasTarget = true;
     }
 
     public float GetRange()

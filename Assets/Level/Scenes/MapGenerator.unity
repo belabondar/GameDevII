@@ -865,6 +865,7 @@ GameObject:
   - component: {fileID: 1726545968}
   - component: {fileID: 1726545967}
   - component: {fileID: 1726545966}
+  - component: {fileID: 1726545969}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -884,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e187361aaf3e37b4d9a5dab904fc66ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turret: {fileID: 1199195392765915428, guid: a6030cf39c9ad644f95fb71a2b5cddab, type: 3}
+  turret: {fileID: 7499847310015617613, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d, type: 3}
   allowedMaterial: {fileID: 2100000, guid: 99e59cc7b197a894bb0c20412f472f23, type: 2}
   disallowedMaterial: {fileID: 2100000, guid: 35710fc9087910140a2f92ac7acd8b23, type: 2}
 --- !u!114 &1726545967
@@ -909,13 +910,32 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1726545965}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.17385, y: 1.2163671, z: -0.0566082}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1726545969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726545965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa164bc3976418e4faaa3d2215cb19b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundTile: {fileID: 350090331097879730, guid: 8fd5102de372e2546ba612acee2ea886,
+    type: 3}
+  pathTile: {fileID: 7460889227054052388, guid: 7c0584091d64ac54f966fad2bfb48218,
+    type: 3}
+  startTile: {fileID: 7460889227054052388, guid: f546f4d2e5eab6240971b1ffb0829adc,
+    type: 3}
+  endTile: {fileID: 7460889227054052388, guid: 68f21262d88b4784d9f4561cc814dad4, type: 3}
 --- !u!1 &2099932812
 GameObject:
   m_ObjectHideFlags: 0
