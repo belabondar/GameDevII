@@ -23,7 +23,7 @@ public class ProjectileController : MonoBehaviour
     {
         if (followTarget) AimAtTarget();
         transform.position += transform.forward * (Time.deltaTime * speed);
-        if (Vector3.Distance(_start, transform.position) > distanceCull) Destroy(gameObject);
+        if (Vector3.Distance(_start, transform.position) > distanceCull && Target == null) Destroy(gameObject);
     }
 
     private void AimAtTarget()

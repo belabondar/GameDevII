@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
     public GameObject[] envAssets;
     private readonly List<GameObject> envObjects = new();
     private bool _blocked;
+    private GameObject _building;
     private TileType _tileType;
 
     public void Init(TileType tileType)
@@ -49,7 +50,9 @@ public class Tile : MonoBehaviour
             var asset = envAssets[Random.Range(0, envAssets.Length - 1)];
             var position = transform.position + new Vector3(Random.Range(xMinMax[0], xMinMax[1]), 0f,
                 Random.Range(zMinMax[0], zMinMax[1]));
-            envObjects.Add(Instantiate(asset, position, new Quaternion(0, Random.Range(0f, 360f), 0, 0)));
+            var obj = Instantiate(asset, position, new Quaternion(0, Random.Range(0f, 360f), 0, 0));
+            obj.transform.parent = transform;
+            envObjects.Add(obj);
         }
     }
 
@@ -57,5 +60,10 @@ public class Tile : MonoBehaviour
     {
         foreach (var item in envObjects) Destroy(item);
         Destroy(gameObject);
+    }
+
+    public void SetBuilding(GameObject building)
+    {
+        _building = building;
     }
 }

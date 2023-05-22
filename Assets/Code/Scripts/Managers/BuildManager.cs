@@ -4,13 +4,11 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance;
 
-    public GameObject turret;
-
 
     public Material allowedMaterial;
     public Material disallowedMaterial;
 
-    private GameObject _turretToBuild;
+    private BuildingType _buildingType;
 
     private void Awake()
     {
@@ -22,17 +20,20 @@ public class BuildManager : MonoBehaviour
         }
 
         Instance = this;
+
+        _buildingType = BuildingType.None;
     }
 
-    private void Start()
+    public BuildingType GetBuildingType()
     {
-        _turretToBuild = turret;
+        return _buildingType;
     }
 
-    public GameObject GetTurretToBuild()
+    public void SetBuildingType(BuildingType type)
     {
-        return _turretToBuild;
+        _buildingType = type;
     }
+
 
     public Material GetAllowedMaterial()
     {

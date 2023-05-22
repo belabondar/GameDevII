@@ -8,10 +8,10 @@ public class GameManager : MonoBehaviour
     public Map mapRef;
 
     public GameObject enemy;
+    private readonly List<Building> _buildings = new();
 
     private readonly List<EnemyController> _enemies = new();
     private readonly List<Spawner> _spawners = new();
-    private readonly List<TowerController> _towerControllers = new();
 
     private Map _map;
 
@@ -27,7 +27,10 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // Destroy the GameObject, this component is attached to
         }
+    }
 
+    private void Start()
+    {
         _map = Instantiate(mapRef, new Vector3(0, 0, 0), transform.rotation);
     }
 
@@ -59,14 +62,14 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void AddTower(TowerController tower)
+    public void RegisterTower(Building building)
     {
-        _towerControllers.Add(tower);
+        _buildings.Add(building);
     }
 
-    public void RemoveTower(TowerController tower)
+    public void RemoveTower(Building building)
     {
-        _towerControllers.Remove(tower);
+        _buildings.Remove(building);
     }
 
     public List<Vector3> GetWayPoints()

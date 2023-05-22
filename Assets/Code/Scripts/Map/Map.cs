@@ -23,9 +23,13 @@ public class Map : MonoBehaviour
     private float _xOffset;
     private float _yOffset;
 
-    private void Start()
+    private void Awake()
     {
         _tileFactory = TileFactory.Instance;
+    }
+
+    private void Start()
+    {
         Init();
     }
 
@@ -104,7 +108,7 @@ public class Map : MonoBehaviour
                     var tentative_g = currentNode.totalWeight + successor.weight;
                     if (!(openList.Contains(successor) && tentative_g > successor.totalWeight))
                     {
-                        successor.bestSuccesor = currentNode;
+                        successor.bestSuccessor = currentNode;
                         successor.totalWeight = tentative_g;
                         if (!openList.Contains(successor)) openList.Enqueue(successor, successor.weight);
                     }
@@ -131,13 +135,13 @@ public class Map : MonoBehaviour
             _map[destination.x, destination.y] = 3;
             _wayPoints.Insert(0, new Vector3(start + destination.x * tileSize, 0f, start + destination.y * tileSize));
 
-            var successor = destination.bestSuccesor;
+            var successor = destination.bestSuccessor;
 
             while (successor != null)
             {
                 _map[successor.x, successor.y] = 1;
                 _wayPoints.Insert(0, new Vector3(start + successor.x * tileSize, 0f, start + successor.y * tileSize));
-                successor = successor.bestSuccesor;
+                successor = successor.bestSuccessor;
             }
 
             _map[startPoint.x, startPoint.y] = 2;
@@ -190,7 +194,7 @@ public class Map : MonoBehaviour
         public readonly float weight;
         public readonly int x;
         public readonly int y;
-        public MapNode bestSuccesor;
+        public MapNode bestSuccessor;
         public float totalWeight;
 
         public MapNode(float weight, int x, int y)

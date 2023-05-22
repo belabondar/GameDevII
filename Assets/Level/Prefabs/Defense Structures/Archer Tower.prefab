@@ -123,7 +123,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6617565382426893544}
-  - component: {fileID: 17323767492907226}
+  - component: {fileID: 6552724200187521013}
+  - component: {fileID: 6145656803592758958}
   m_Layer: 0
   m_Name: Archer Tower
   m_TagString: Untagged
@@ -148,7 +149,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &17323767492907226
+--- !u!114 &6552724200187521013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7499847310015617613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff94934e85def948acb9a3b7af174f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 20
+  isPreview: 0
+  range: 20
+  strength: 2
+  speed: 30
+  fireRate: 3
+  rangeUpgradeStrength: 2
+  strengthUpgradeStrength: 0.5
+  speedUpgradeStrength: 0.2
+  fireRateUpgradeStrength: 0.5
+  maxUpgrades: 10
+--- !u!114 &6145656803592758958
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,15 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568cfc1c537fc944d89fde0f971dec1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseProjectileSpeed: 10
-  baseDamage: 2
-  baseRange: 5
-  baseRateOfFire: 1
-  projectileSpeedOffset: 0.5
-  damageOffset: 0.5
-  rangeOffset: 2
-  fireRateOffset: 0.5
-  maxUpgrades: 15
   projectile: {fileID: -1402907343800045775, guid: cad52464fbf1b7f44b6608bdefda9316,
     type: 3}
   launchPoint: {fileID: 3500266430107419067}
