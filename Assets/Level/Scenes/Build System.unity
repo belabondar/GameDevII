@@ -628,6 +628,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   archerTower: {fileID: 7499847310015617613, guid: 3a6b51fe05c9fde4db0003c8d7cbd77d,
     type: 3}
+  mageTower: {fileID: 0}
+  woodCollector: {fileID: 0}
+  stoneCollector: {fileID: 0}
 --- !u!4 &1618808324
 Transform:
   m_ObjectHideFlags: 0

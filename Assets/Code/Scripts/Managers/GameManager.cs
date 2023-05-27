@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown("space"))
             if (_spawners[0] != null)
-                _spawners[0].Spawn(enemy, 10, 1f);
+                _spawners[0].Spawn(enemy, 1, 1f);
     }
 
     public void AddEnemy(EnemyController enemy)

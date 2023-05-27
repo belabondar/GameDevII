@@ -6,6 +6,9 @@ public class BuildingFactory : MonoBehaviour
     public static BuildingFactory Instance;
 
     public GameObject archerTower;
+    public GameObject mageTower;
+    public GameObject woodCollector;
+    public GameObject stoneCollector;
 
     private void Awake()
     {
@@ -40,7 +43,10 @@ public class BuildingFactory : MonoBehaviour
     {
         return type switch
         {
-            BuildingType.ArcherTower => archerTower
+            BuildingType.ArcherTower => archerTower,
+            BuildingType.MageTower => mageTower,
+            BuildingType.WoodCollector => woodCollector,
+            BuildingType.StoneCollector => stoneCollector
         };
     }
 }
