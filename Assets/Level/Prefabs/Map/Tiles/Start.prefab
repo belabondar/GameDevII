@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12086eb733febf1448945462ec214270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  envAssets: []
+  isBlocked: 1
+  type: 0
 --- !u!114 &-8477872195230472678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7859e86766ef0744ab96b72e5c4f84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 5882897104643715570, guid: 3d4d90a9729767748bd1a5aaab60d297, type: 3}
 --- !u!65 &3864285110449425637
 BoxCollider:
   m_ObjectHideFlags: 0

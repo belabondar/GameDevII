@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4dee5cdbc62d01d4e8b3e4b8d9e3a3e7, type: 2}
+  - {fileID: 2100000, guid: 59b0babd7007c8245949b6a42229e1bd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -94,9 +94,10 @@ GameObject:
   - component: {fileID: 383478305202106245}
   - component: {fileID: 350090331097879730}
   - component: {fileID: 3645143787583079258}
+  - component: {fileID: 5856861814243978018}
   - component: {fileID: 5717801065586813528}
   m_Layer: 0
-  m_Name: Ground
+  m_Name: Stone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,8 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12086eb733febf1448945462ec214270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileType: 0
-  blocked: 0
+  isBlocked: 1
+  type: 0
 --- !u!114 &3645143787583079258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +145,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbf05ddd389e644f961446393892d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5856861814243978018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8482564233964077854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373af8e2649e0a54f95a8c017becacf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceType: 1
+  resourceAmount: 5000
+  envAssets:
+  - {fileID: 3664230686667593667, guid: 50c3104f2cd3276469fe3ff3cd264d1d, type: 3}
 --- !u!65 &5717801065586813528
 BoxCollider:
   m_ObjectHideFlags: 0

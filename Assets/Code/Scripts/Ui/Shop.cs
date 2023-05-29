@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UiScript : MonoBehaviour
+public class Shop : MonoBehaviour
 {
+    public Button archerTowerButton;
+    private Bank _bank;
     private BuildManager _buildManager;
     private GameManager _gameManager;
 
@@ -9,11 +12,14 @@ public class UiScript : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         _buildManager = BuildManager.Instance;
+        _bank = Bank.Instance;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1)) RemoveBuilding();
+        if (_bank.CanPay(_buildManager.GetBuildingFromType(BuildingType.ArcherTower).cost))
+            archerTowerButton.interactable = true;
+        else archerTowerButton.interactable = false;
     }
 
     public void BuyArcherTower()

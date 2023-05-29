@@ -8,12 +8,19 @@ public class GameManager : MonoBehaviour
     public Map mapRef;
 
     public GameObject enemy;
-    private readonly List<Building> _buildings = new();
 
-    private readonly List<EnemyController> _enemies = new();
-    private readonly List<Spawner> _spawners = new();
+    public int startGold = 200;
+    public int startWood = 50;
+    public int startStone = 10;
+
+
+    private readonly List<Building> _buildings = new();
+    private Bank _bank;
+
+    private List<EnemyController> _enemies = new();
 
     private Map _map;
+    private Spawner _spawner;
 
     private void Awake()
     {
@@ -32,13 +39,16 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _map = Instantiate(mapRef, new Vector3(0, 0, 0), transform.rotation);
+        _bank = Bank.Instance;
+        _bank.DepositResource(startGold, startWood, startStone);
     }
 
-    private void Update()
+    private void Init()
     {
-        if (Input.GetKeyDown("space"))
-            if (_spawners[0] != null)
-                _spawners[0].Spawn(enemy, 1, 1f);
+        Destroy(_spawner);
+        foreach (var enemy in _enemies) Destroy(enemy.gameObject);
+
+        _enemies = new List<EnemyController>();
     }
 
     public void AddEnemy(EnemyController enemy)
@@ -79,11 +89,12 @@ public class GameManager : MonoBehaviour
 
     public void AddSpawner(Spawner spawner)
     {
-        _spawners.Add(spawner);
+        _spawner = spawner;
     }
 
     public void RegenerateMap()
     {
+        Init();
         _map.ResetMap();
     }
 }

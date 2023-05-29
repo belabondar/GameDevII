@@ -10,11 +10,14 @@ public class EnemyController : MonoBehaviour
     //Health
     public float maxHealth = 10f;
 
+    public int goldDrop = 10;
+
     //Get UI Element to always face camera
     public GameObject healthBarUi;
 
     //Get Slider to adjust health display
     public Slider healthBar;
+    private Bank _bank;
     private Camera _camera;
 
     private Vector3 _direction;
@@ -33,15 +36,19 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _bank = Bank.Instance;
         _gameManager.AddEnemy(this);
         _wayPoints = _gameManager.GetWayPoints();
         //target the first waypoint
         _targetPoint = _wayPoints[_targetIndex];
+
+        transform.rotation = LookAt(_targetPoint);
         //Spawn enemy with max health
         _health = maxHealth;
         _camera = Camera.main;
         healthBar.value = _health / maxHealth;
     }
+
 
     // Update is called once per frame
     private void Update()
@@ -52,8 +59,8 @@ public class EnemyController : MonoBehaviour
         transform.Translate(Vector3.forward * (Time.deltaTime * mSpeed));
 
 
-        if (Vector3.Distance(transform.position, _targetPoint) <= 0.2f)
-            if (_targetIndex < _wayPoints.Count)
+        if (Vector3.Distance(transform.position, _targetPoint) <= 0.5f)
+            if (_targetIndex < _wayPoints.Count - 1)
             {
                 _targetIndex++;
                 _targetPoint = _wayPoints[_targetIndex];
@@ -78,16 +85,22 @@ public class EnemyController : MonoBehaviour
 
     private void FaceCamera(GameObject targetObject)
     {
-        var rotation = _camera.transform.rotation;
-        targetObject.transform.LookAt(transform.position + rotation * Vector3.back,
-            rotation * Vector3.up);
+        var camRotation = _camera.transform.rotation;
+        targetObject.transform.LookAt(transform.position + camRotation * Vector3.back,
+            camRotation * Vector3.up);
     }
 
     private void TurnTowards(Vector3 targetPoint, float speed)
     {
-        _direction = (targetPoint - transform.position).normalized;
-        _lookRotation = Quaternion.LookRotation(_direction);
+        _lookRotation = LookAt(targetPoint);
         transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * speed);
+    }
+
+    private Quaternion LookAt(Vector3 targetPoint)
+    {
+        _direction = targetPoint - transform.position;
+        _direction.y = 0;
+        return Quaternion.LookRotation(_direction);
     }
 
     private void Damage(float dmg)
@@ -101,6 +114,7 @@ public class EnemyController : MonoBehaviour
 
     private void Death()
     {
+        if (_health <= 0) _bank.DepositResource(goldDrop, 0, 0);
         _gameManager.RemoveEnemy(this);
         Destroy(gameObject);
     }

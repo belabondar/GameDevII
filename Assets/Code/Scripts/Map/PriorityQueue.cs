@@ -25,7 +25,15 @@ namespace Code.Scripts.Map
         /// <param name="priorityValue">Item priority value as Double.</param>
         public void Enqueue(T item, double priorityValue)
         {
-            elements.Add(Tuple.Create(item, priorityValue));
+            var newVal = Tuple.Create(item, priorityValue);
+            for (var i = 0; i < elements.Count; i++)
+                if (EqualityComparer<T>.Default.Equals(item, elements[i].Item1))
+                {
+                    elements[i] = newVal;
+                    return;
+                }
+
+            elements.Add(newVal);
         }
 
         /// <summary>

@@ -357,6 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSpeed: 5
   maxHealth: 10
+  goldDrop: 10
   healthBarUi: {fileID: 6668567772695240174}
   healthBar: {fileID: 5918923455178727154}
 --- !u!54 &1264735446717440358

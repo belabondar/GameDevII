@@ -5,6 +5,13 @@ public class ProjectileTower : MonoBehaviour
     public ProjectileController projectile;
     public Transform launchPoint;
 
+    public Building.Trait range;
+    public Building.Trait strength;
+    public Building.Trait projectileSpeed;
+    public Building.Trait fireRateInShotsPerSecond;
+
+    public int maxUpgrades;
+
     private Building _building;
     private GameManager _gameManager;
 
@@ -21,7 +28,7 @@ public class ProjectileTower : MonoBehaviour
     private void Update()
     {
         //Dont shoot if not enough time has passed to the last shot or its a preview
-        if (Time.time - _lastShot < _building.GetTimeDelay() || _building.isPreview) return;
+        if (Time.time - _lastShot < 1f / fireRateInShotsPerSecond.Value || _building.isPreview) return;
         var hasTarget = GetTarget();
         if (hasTarget)
         {
@@ -36,9 +43,9 @@ public class ProjectileTower : MonoBehaviour
             projectileInstance.transform.parent = gameObject.transform;
 
             //Settings
-            projectileInstance.speed = _building.GetSpeed();
-            projectileInstance.damage = _building.GetStrength();
-            projectileInstance.distanceCull = _building.GetRange();
+            projectileInstance.speed = projectileSpeed.Value;
+            projectileInstance.damage = strength.Value;
+            projectileInstance.distanceCull = range.Value;
 
             //Set Target
             projectileInstance.Target = _target;
@@ -49,7 +56,7 @@ public class ProjectileTower : MonoBehaviour
     {
         var enemies = _gameManager.GetEnemies();
         foreach (var enemy in enemies)
-            if (Vector3.Distance(enemy.transform.position, transform.position) <= _building.GetRange())
+            if (Vector3.Distance(enemy.transform.position, transform.position) <= range.Value)
             {
                 _target = enemy;
                 return true;

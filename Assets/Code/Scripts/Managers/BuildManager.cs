@@ -4,11 +4,15 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance;
 
+    public Building archerTower;
 
-    public Material allowedMaterial;
-    public Material disallowedMaterial;
+    [HideInInspector] public bool hasBuilding;
 
-    private BuildingType _buildingType;
+    private Building _activeBuilding;
+    private Bank _bank;
+
+    [HideInInspector] public bool CanAfford => _bank.CanPay(_activeBuilding.cost);
+
 
     private void Awake()
     {
@@ -20,28 +24,44 @@ public class BuildManager : MonoBehaviour
         }
 
         Instance = this;
-
-        _buildingType = BuildingType.None;
     }
 
-    public BuildingType GetBuildingType()
+    private void Start()
     {
-        return _buildingType;
+        _bank = Bank.Instance;
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1)) RemoveBuilding();
+    }
+
+
+    public Building GetBuilding()
+    {
+        return _activeBuilding;
     }
 
     public void SetBuildingType(BuildingType type)
     {
-        _buildingType = type;
+        Debug.Log("Set Active Building");
+        _activeBuilding = type switch
+        {
+            BuildingType.ArcherTower => archerTower
+        };
+        hasBuilding = true;
     }
 
-
-    public Material GetAllowedMaterial()
+    public Building GetBuildingFromType(BuildingType type)
     {
-        return allowedMaterial;
+        return type switch
+        {
+            BuildingType.ArcherTower => archerTower
+        };
     }
 
-    public Material GetDisallowedMaterial()
+    public void RemoveBuilding()
     {
-        return disallowedMaterial;
+        hasBuilding = false;
     }
 }

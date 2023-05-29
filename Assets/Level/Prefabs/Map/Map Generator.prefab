@@ -46,4 +46,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tiles: 20
   tileSize: 4
-  scale: 5
+  pathScale: 5
+  envScale: 4
+  woodThreshold: 0.45
+  stoneOccurence: 0.1
+  randomizeStartAndEnd: 1
+  startRange:
+    xRange:
+      min: 1
+      max: 5
+    yRange:
+      min: 1
+      max: 5
+  endRange:
+    xRange:
+      min: 14
+      max: 18
+    yRange:
+      min: 14
+      max: 18
+  passableTiles: 000000000200000001000000
+  groundEdgeCostMultiplier: 1
+  woodEdgeCostMultiplier: 2
+  stoneEdgeCostMultiplier: 5

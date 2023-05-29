@@ -1,28 +1,19 @@
+using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Building : MonoBehaviour
 {
-    public int cost;
     public bool isPreview;
+    public Cost cost;
+    public BuildingType type;
 
-    public float range;
-    public float strength;
-    public float speed;
-    public float fireRate;
+    public Renderer turretRenderer;
+    public Material allowedMaterial;
+    public Material disallowedMaterial;
 
-    public float rangeUpgradeStrength;
-    public float strengthUpgradeStrength;
-    public float speedUpgradeStrength;
-    public float fireRateUpgradeStrength;
-
-    public int maxUpgrades;
-
-    private int _fireRateUpgrades;
 
     private GameManager _gameManager;
-    private int _rangeUpgrades;
-    private int _speedUpgrades;
-    private int _strengthUpgrades;
 
     private void Start()
     {
@@ -31,23 +22,39 @@ public class Building : MonoBehaviour
         _gameManager.RegisterTower(this);
     }
 
-    public float GetRange()
+    public void SetPreview(bool canBuild)
     {
-        return range + rangeUpgradeStrength * _rangeUpgrades;
+        turretRenderer.material = canBuild ? allowedMaterial : disallowedMaterial;
+        turretRenderer.shadowCastingMode = ShadowCastingMode.Off;
+
+        isPreview = true;
     }
 
-    public float GetStrength()
+    [Serializable]
+    public class Cost
     {
-        return strength + strengthUpgradeStrength * _strengthUpgrades;
+        public int gold;
+        public int wood;
+        public int stone;
     }
 
-    public float GetSpeed()
+    [Serializable]
+    public class Trait
     {
-        return speed + speedUpgradeStrength * _speedUpgrades;
-    }
+        public float baseValue;
+        public float upgradeStrength;
+        public int maxUpgrades;
+        public Cost upgradeCost;
+        private int _upgrades;
 
-    public float GetTimeDelay()
-    {
-        return 1f / fireRate + fireRateUpgradeStrength * _fireRateUpgrades;
+        public bool CanUpgrade => Bank.Instance.CanPay(upgradeCost) && _upgrades < maxUpgrades;
+        public float Value => baseValue + upgradeStrength * _upgrades;
+
+        public void Upgrade()
+        {
+            if (!CanUpgrade) return;
+            _upgrades++;
+            Bank.Instance.Pay(upgradeCost);
+        }
     }
 }

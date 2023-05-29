@@ -2,33 +2,34 @@ using UnityEngine;
 
 public class TileMouseHandler : MonoBehaviour
 {
-    private BuildingFactory _buildingFactory;
+    private Bank _bank;
+    private GameObject _buildingPreview;
     private BuildManager _buildManager;
-
     private bool _hasPreview;
-    private GameObject _turret;
-    private GameObject _turretPreview;
+    private Tile _tile;
 
     private void Start()
     {
         _buildManager = BuildManager.Instance;
-        _buildingFactory = BuildingFactory.Instance;
-        if (_buildingFactory == null) Debug.Log("Error");
+        _tile = gameObject.GetComponent<Tile>();
+        _bank = Bank.Instance;
     }
 
     private void Update()
     {
-        if (_buildManager.GetBuildingType() == BuildingType.None) DestroyPreview();
+        //Destroy the preview if building is deselected
+        if (!_buildManager.hasBuilding) DestroyPreview();
     }
 
     private void OnMouseDown()
     {
-        if (CanBuild()) Build();
+        Debug.Log(!_tile.isBlocked);
+        if (_buildManager.hasBuilding && !_tile.isBlocked) Build();
     }
 
     private void OnMouseEnter()
     {
-        BuildPreview();
+        if (_buildManager.hasBuilding) BuildPreview();
     }
 
     private void OnMouseExit()
@@ -36,36 +37,30 @@ public class TileMouseHandler : MonoBehaviour
         DestroyPreview();
     }
 
-    private bool CanBuild()
+    private void DestroyPreview()
     {
-        return _buildManager.GetBuildingType() != BuildingType.None && _turret == null &&
-               !gameObject.GetComponent<Tile>().IsBlocked();
+        if (_hasPreview) Destroy(_buildingPreview);
+        _hasPreview = false;
     }
 
     private void BuildPreview()
     {
-        if (_buildManager.GetBuildingType() == BuildingType.None) return;
-        _turretPreview = _buildingFactory.InstancePreviewBuilding(_buildManager.GetBuildingType(),
-            CanBuild() ? _buildManager.allowedMaterial : _buildManager.disallowedMaterial, transform.position,
-            transform.rotation);
+        var building = Instantiate(_buildManager.GetBuilding(), transform.position, transform.rotation);
+        building.SetPreview(!_tile.isBlocked && _buildManager.CanAfford);
         _hasPreview = true;
-    }
-
-    private void DestroyPreview()
-    {
-        if (_hasPreview)
-            Destroy(_turretPreview);
-        _turretPreview = null;
-        _hasPreview = false;
+        _buildingPreview = building.gameObject;
     }
 
     private void Build()
     {
         //Only build if preview exists -> Only when building is selected
-        if (_hasPreview) Destroy(_turretPreview);
-
-        _hasPreview = false;
-        _turret = _buildingFactory.InstanceBuilding(_buildManager.GetBuildingType(), transform.position,
-            transform.rotation);
+        if (_hasPreview && _buildManager.CanAfford)
+        {
+            Destroy(_buildingPreview);
+            _hasPreview = false;
+            _bank.Pay(_buildManager.GetBuilding().GetComponent<Building>().cost);
+            _tile.SetBuilding(Instantiate(_buildManager.GetBuilding(), transform.position, transform.rotation));
+            _buildManager.RemoveBuilding();
+        }
     }
 }

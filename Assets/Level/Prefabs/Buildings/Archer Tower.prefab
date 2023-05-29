@@ -161,17 +161,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff94934e85def948acb9a3b7af174f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 20
   isPreview: 0
-  range: 20
-  strength: 2
-  speed: 30
-  fireRate: 3
-  rangeUpgradeStrength: 2
-  strengthUpgradeStrength: 0.5
-  speedUpgradeStrength: 0.2
-  fireRateUpgradeStrength: 0.5
-  maxUpgrades: 10
+  cost:
+    gold: 150
+    wood: 0
+    stone: 0
+  type: 0
+  turretRenderer: {fileID: 6678317434876165402}
+  allowedMaterial: {fileID: 2100000, guid: 99e59cc7b197a894bb0c20412f472f23, type: 2}
+  disallowedMaterial: {fileID: 2100000, guid: 35710fc9087910140a2f92ac7acd8b23, type: 2}
 --- !u!114 &6145656803592758958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,3 +185,36 @@ MonoBehaviour:
   projectile: {fileID: -1402907343800045775, guid: cad52464fbf1b7f44b6608bdefda9316,
     type: 3}
   launchPoint: {fileID: 3500266430107419067}
+  range:
+    baseValue: 20
+    upgradeStrength: 2
+    maxUpgrades: 10
+    upgradeCost:
+      gold: 30
+      wood: 10
+      stone: 0
+  strength:
+    baseValue: 2
+    upgradeStrength: 0
+    maxUpgrades: 0
+    upgradeCost:
+      gold: 0
+      wood: 0
+      stone: 0
+  projectileSpeed:
+    baseValue: 30
+    upgradeStrength: 0
+    maxUpgrades: 0
+    upgradeCost:
+      gold: 0
+      wood: 0
+      stone: 0
+  fireRateInShotsPerSecond:
+    baseValue: 5
+    upgradeStrength: 0
+    maxUpgrades: 0
+    upgradeCost:
+      gold: 0
+      wood: 0
+      stone: 0
+  maxUpgrades: 0

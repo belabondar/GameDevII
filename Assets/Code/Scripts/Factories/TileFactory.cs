@@ -8,6 +8,8 @@ public class TileFactory : MonoBehaviour
     public Tile pathTile;
     public Tile startTile;
     public Tile endTile;
+    public Tile woodTile;
+    public Tile stoneTile;
 
     private void Awake()
     {
@@ -21,35 +23,23 @@ public class TileFactory : MonoBehaviour
         Instance = this;
     }
 
-    public Tile SpawnGroundTile(Vector3 position, Quaternion rotation)
+    public Tile SpawnTile(Vector3 position, Quaternion rotation, TileType type, int x, int y)
     {
-        Debug.Log("Spawning Ground Tile");
-        var tile = Instantiate(groundTile, position, rotation);
-        tile.Init(TileType.Ground);
+        var tile = Instantiate(GetTileByType(type), position, rotation);
+        tile.Init(x, y, type);
         return tile;
     }
 
-    public Tile SpawnPathTile(Vector3 position, Quaternion rotation)
+    public Tile GetTileByType(TileType type)
     {
-        Debug.Log("Spawning Path Tile");
-        var tile = Instantiate(pathTile, position, rotation);
-        tile.Init(TileType.Path);
-        return tile;
-    }
-
-    public Tile SpawnStartTile(Vector3 position, Quaternion rotation)
-    {
-        Debug.Log("Spawning Start Tile");
-        var tile = Instantiate(startTile, position, rotation);
-        tile.Init(TileType.Start);
-        return tile;
-    }
-
-    public Tile SpawnEndTile(Vector3 position, Quaternion rotation)
-    {
-        Debug.Log("Spawning End Tile");
-        var tile = Instantiate(endTile, position, rotation);
-        tile.Init(TileType.End);
-        return tile;
+        return type switch
+        {
+            TileType.Ground => groundTile,
+            TileType.Path => pathTile,
+            TileType.Start => startTile,
+            TileType.End => endTile,
+            TileType.Wood => woodTile,
+            TileType.Stone => stoneTile
+        };
     }
 }
