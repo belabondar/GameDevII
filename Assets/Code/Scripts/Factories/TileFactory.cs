@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TileFactory : MonoBehaviour
 {
+    //Singleton is not necessary but probably nicer to only have one factory running instead of recreating one every time
+    //we want to instance a tile
     public static TileFactory Instance;
 
     public Tile groundTile;
@@ -23,6 +25,7 @@ public class TileFactory : MonoBehaviour
         Instance = this;
     }
 
+    //Factory spawns tiles depending on input
     public Tile SpawnTile(Vector3 position, Quaternion rotation, TileType type, int x, int y)
     {
         var tile = Instantiate(GetTileByType(type), position, rotation);

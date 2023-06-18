@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //Singleton pattern so there is only one game manager influencing the game flow, the instance is publicly exposed
+    //to be accessed on runtime
     public static GameManager Instance;
 
     public Map mapRef;
